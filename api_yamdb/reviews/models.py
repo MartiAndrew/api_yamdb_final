@@ -1,5 +1,53 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+
+class Title(models.Model):
+    """ Произведения, к которым пишут отзывы (определённый фильм, книга или песенка).
+    Наполнение доступно только администратору"""
+    name = models.CharField(
+        max_length=256,
+        verbose_name="Произведение",
+    )
+    description = models.TextField(
+        max_length=256,
+        verbose_name="Описание",
+        null=True,
+        blank=True,
+    )
+    year = models.IntegerField(
+        verbose_name="Год выпуска",
+    )
+
+    def clean(self):
+        current_year = timezone.now().year
+        if self.year < 1800 or self.year > current_year:
+            raise ValidationError('Год должен быть между 1800 и текущим')
+
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL,
+        related_name="titles",
+        verbose_name="Категория",
+        blank=True,
+        null=True,
+    )
+
+    genre = models.ManyToManyField(
+        Genre, related_name="titles",
+        verbose_name="Жанр",
+    )
+
+    class Meta:
+        verbose_name = "Произведение"
+        verbose_name_plural = 'Подписки'
+
+    def __str__(self):
+        return f'{self.name}, {self.category}, {self.genre}, {self.year}'
+
+
+
 
 
 class Review(models.Model):
