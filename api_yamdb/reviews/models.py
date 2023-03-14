@@ -47,6 +47,22 @@ class Title(models.Model):
         return f'{self.name}, {self.category}, {self.genre}, {self.year}'
 
 
+class Category(models.Model):
+    """Категории (типы) произведений («Фильмы», «Книги», «Музыка»). Одно произведение может быть привязано
+    только к одной категории"""
+    name = models.CharField(
+        max_length=256,
+        verbose_name="Имя категории",
+    )
+    slug = models.SlugField(
+        max_length=50,
+        verbose_name="Слаг категории",
+        unique=True,
+    )
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = 'Категории'
+
 
 
 
@@ -56,7 +72,8 @@ class Review(models.Model):
     title = models.IntegerField()  # ForeignKey(Title, on_delete=models.CASCADE, related_name='reviews')
     text = models.TextField()
     score = models.IntegerField(validators=[MinValueValidator(1),
-                                            MaxValueValidator(10)])
+                                            MaxValueValidator(10)]
+                                )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     def __str__(self):
@@ -67,7 +84,8 @@ class Comment(models.Model):
     # todo: раскомментировать и заменить IntegerField после объявления модели юзера
     author = models.IntegerField()  # ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     review = models.ForeignKey(Review, on_delete=models.CASCADE,
-                               related_name='comments')
+                               related_name='comments'
+                               )
     text = models.TextField()
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
