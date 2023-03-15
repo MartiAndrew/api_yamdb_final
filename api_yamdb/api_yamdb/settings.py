@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 
@@ -11,12 +12,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# Application definition
+
 PROJECT_APPS = [
     "api",
+    "user",
     "reviews",
 ]
-
-# Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
 ] + PROJECT_APPS
 
 MIDDLEWARE = [
@@ -105,3 +108,29 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = ((BASE_DIR / "static/"),)
+
+AUTH_USER_MODEL = "user.User"
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+SERVICE_EMAIL = "admin@yamdb.ru"
+
+ACCESS_TOKEN_EXPIRE_SECONDS = 86400
+
+LANGUAGE_CODE = "ru-RU"
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}
+    },
+}
