@@ -3,8 +3,10 @@ from rest_framework import routers
 
 from .v1.user.view import UserViewSet, UserMeAPIView
 from .v1.auth.view import SignUpAPIView, TokenAPIView
+from .views import TitleViewSet
 
 router = routers.DefaultRouter()
+router.register('titles', TitleViewSet, basename='titles')
 router.register(r"users", UserViewSet, basename="user")
 
 urlpatterns = [

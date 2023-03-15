@@ -61,12 +61,6 @@ class Title(models.Model):
     year = models.IntegerField(
         verbose_name="Год выпуска",
     )
-
-    def clean(self):
-        current_year = timezone.now().year
-        if self.year < 1800 or self.year > current_year:
-            raise ValidationError('Год должен быть между 1800 и текущим')
-
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL,
         related_name="titles",
@@ -79,6 +73,11 @@ class Title(models.Model):
         Genre, related_name="titles",
         verbose_name="Жанр",
     )
+
+    def clean(self):
+        current_year = timezone.now().year
+        if self.year < 1800 or self.year > current_year:
+            raise ValidationError('Год должен быть между 1800 и текущим')
 
     class Meta:
         verbose_name = "Произведение"
