@@ -4,6 +4,47 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
+class Genre(models.Model):
+    """Жанры произведений. Одно произведение может быть привязано к нескольким жанрам."""
+    name = models.CharField(
+        max_length=256,
+        verbose_name="Имя жанра",
+    )
+    slug = models.SlugField(
+        max_length=50,
+        verbose_name="Слаг жанра",
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = "Жанр"
+        verbose_name_plural = 'Жанры'
+
+    def __str__(self):
+        return self.name
+
+
+class Category(models.Model):
+    """Категории (типы) произведений («Фильмы», «Книги», «Музыка»). Одно произведение может быть привязано
+    только к одной категории"""
+    name = models.CharField(
+        max_length=256,
+        verbose_name="Имя категории",
+    )
+    slug = models.SlugField(
+        max_length=50,
+        verbose_name="Слаг категории",
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.name
+
+
 class Title(models.Model):
     """ Произведения, к которым пишут отзывы (определённый фильм, книга или песенка).
     Наполнение доступно только администратору"""
@@ -45,29 +86,6 @@ class Title(models.Model):
 
     def __str__(self):
         return f'{self.name}, {self.category}, {self.genre}, {self.year}'
-
-
-class Category(models.Model):
-    """Категории (типы) произведений («Фильмы», «Книги», «Музыка»). Одно произведение может быть привязано
-    только к одной категории"""
-    name = models.CharField(
-        max_length=256,
-        verbose_name="Имя категории",
-    )
-    slug = models.SlugField(
-        max_length=50,
-        verbose_name="Слаг категории",
-        unique=True,
-    )
-    class Meta:
-        verbose_name = "Категория"
-        verbose_name_plural = 'Категории'
-
-    def __str__(self):
-        return self.name
-
-
-
 
 
 class Review(models.Model):
