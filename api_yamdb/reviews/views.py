@@ -1,14 +1,22 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.pagination import LimitOffsetPagination
 
-from .models import Review
-from .serializers import CommentSerializer, ReviewSerializer
+from .models import Review, Title
+from .serializers import CommentSerializer, ReviewSerializer, TitleSerializer
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    serializer_class = TitleSerializer
+    queryset = Title.objects.all()
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'year', 'genre__slug', 'category__slug')
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     pagination_class = LimitOffsetPagination
+
     # todo: раскомментировать после объявления модели Title
     # def get_queryset(self):
     #     title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
