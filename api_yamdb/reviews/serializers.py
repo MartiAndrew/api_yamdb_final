@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SlugRelatedField
 
-from .models import Comment, Review, Category, Title
+from .models import Comment, Review, Category, Title, Genre
 
 class TitleSerializer(ModelSerializer):
     category = SlugRelatedField(queryset=Category.objects.all(),
