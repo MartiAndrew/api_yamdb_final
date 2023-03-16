@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 
 from reviews.models import Title
-from ..title.serializers import TitleSerializer
+from ..title.serializers import TitleSerializer, TitleReadSerializer
 from ..user.permissions import AdminPermission
 
 
@@ -23,3 +23,8 @@ class TitleViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (AdminPermission,)
     filterset_fields = TitleFilter
+
+    def get_serializer_class(self):
+        if self.action in ('list','retrieve'):
+            return TitleReadSerializer
+        return TitleSerializer
