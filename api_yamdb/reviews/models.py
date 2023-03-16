@@ -1,7 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
+from django.db.models import Avg
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 class Genre(models.Model):
@@ -23,6 +25,11 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
 
 class Category(models.Model):
     """Категории (типы) произведений («Фильмы», «Книги», «Музыка»). Одно произведение может быть привязано
@@ -43,6 +50,11 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class Title(models.Model):

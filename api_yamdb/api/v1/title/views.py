@@ -10,11 +10,12 @@ from ..user.permissions import AdminPermission
 class TitleFilter(django_filters.FilterSet):
     class Meta:
         model = Title
-        fields = {'name':['iexact','icontains'],
-                  'year':['lte','gte'],
-                  'genre__slug':['iexact','icontains'],
-                  'category__slug':['iexact','icontains']
+        fields = {'name': ['iexact', 'icontains'],
+                  'year': ['lte', 'gte'],
+                  'genre__slug': ['iexact', 'icontains'],
+                  'category__slug': ['iexact', 'icontains']
                   }
+
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
