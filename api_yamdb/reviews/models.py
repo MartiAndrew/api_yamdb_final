@@ -57,6 +57,33 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
+class Review(models.Model):
+    # todo: раскомментировать и заменить IntegerField после объявления моделей юзера и Title
+    author = models.IntegerField()  # ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    title = models.IntegerField()  # ForeignKey(Title, on_delete=models.CASCADE, related_name='reviews')
+    text = models.TextField()
+    score = models.IntegerField(validators=[MinValueValidator(1),
+                                            MaxValueValidator(10)]
+                                )
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
+
+    def __str__(self):
+        return self.text
+
+
+class Comment(models.Model):
+    # todo: раскомментировать и заменить IntegerField после объявления модели юзера
+    author = models.IntegerField()  # ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    review = models.ForeignKey(Review, on_delete=models.CASCADE,
+                               related_name='comments'
+                               )
+    text = models.TextField()
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
+
+    def __str__(self):
+        return self.text
+
+
 class Title(models.Model):
     """ Произведения, к которым пишут отзывы (определённый фильм, книга или песенка).
     Наполнение доступно только администратору"""
@@ -98,29 +125,6 @@ class Title(models.Model):
     def __str__(self):
         return f'{self.name}, {self.category}, {self.genre}, {self.year}'
 
-
-class Review(models.Model):
-    # todo: раскомментировать и заменить IntegerField после объявления моделей юзера и Title
-    author = models.IntegerField()  # ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
-    title = models.IntegerField()  # ForeignKey(Title, on_delete=models.CASCADE, related_name='reviews')
-    text = models.TextField()
-    score = models.IntegerField(validators=[MinValueValidator(1),
-                                            MaxValueValidator(10)]
-                                )
-    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-
-    def __str__(self):
-        return self.text
-
-
-class Comment(models.Model):
-    # todo: раскомментировать и заменить IntegerField после объявления модели юзера
-    author = models.IntegerField()  # ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    review = models.ForeignKey(Review, on_delete=models.CASCADE,
-                               related_name='comments'
-                               )
-    text = models.TextField()
-    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-
-    def __str__(self):
-        return self.text
+    def get_rating(self):
+        rating = self.reviews.aggregate(models.Avg('score'))['score__avg']
+        return int(rating)
