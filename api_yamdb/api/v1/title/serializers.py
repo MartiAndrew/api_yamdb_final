@@ -17,7 +17,7 @@ class TitleReadSerializer(ModelSerializer):
     genre = SlugRelatedField(many=True,
                              read_only=True
                              )
-    # rating = serializers.SerializerMethodField()
+    rating = serializers.IntegerField()
     class Meta:
         fields = ('name', 'year', 'description', 'rating' 'genre', 'category')
         model = Title
