@@ -14,5 +14,5 @@ class CategoryViewSet(mixins.CreateModelMixin,
     serializer_class = CategorySerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (AdminPermission, )
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (filters.SearchFilter, )
     search_fields = ('category__slug',)
