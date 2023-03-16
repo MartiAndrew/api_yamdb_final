@@ -7,9 +7,9 @@ from ..user.permissions import AdminPermission
 
 
 class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (AdminPermission, )
-    queryset = Title.objects.all()
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'year', 'genre__slug', 'category__slug')
