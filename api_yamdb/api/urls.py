@@ -3,10 +3,14 @@ from rest_framework import routers
 
 from .v1.user.view import UserViewSet, UserMeAPIView
 from .v1.auth.view import SignUpAPIView, TokenAPIView
-from .views import TitleViewSet
+from v1.genre.views import GenreViewSet
+from v1.category.views import CategoryViewSet
+from v1.title.views import TitleViewSet
 
 router = routers.DefaultRouter()
 router.register('titles', TitleViewSet, basename='titles')
+router.register('categories', CategoryViewSet, basename='categories')
+router.register('genres', GenreViewSet, basename='genres')
 router.register(r"users", UserViewSet, basename="user")
 
 urlpatterns = [
