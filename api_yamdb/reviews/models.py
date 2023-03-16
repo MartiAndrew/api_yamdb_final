@@ -125,6 +125,6 @@ class Title(models.Model):
     def __str__(self):
         return f'{self.name}, {self.category}, {self.genre}, {self.year}'
 
-    def get_rating(self):
-        rating = self.reviews.aggregate(models.Avg('score'))['score__avg']
-        return int(rating)
+    # todo:def get_rating(self):
+    #     rating = self.reviews.aggregate(models.Avg('score'))['score__avg']
+    #     return int(rating)
