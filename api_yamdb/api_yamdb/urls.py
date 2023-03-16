@@ -7,13 +7,13 @@ from django.views.generic import TemplateView
 
 from rest_framework import permissions
 
-DEFAULT_VERSION = "v1"
+DEFAULT_VERSION = 'v1'
 
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Yamdb API",
-        default_version="v1",
+        title='Yamdb API',
+        default_version='v1',
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
@@ -21,16 +21,16 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     re_path(
-        r"^swagger/$",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
+        r'^swagger/$',
+        schema_view.with_ui('swagger', cache_timeout=0),
+        name='schema-swagger-ui',
     ),
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
     path(
-        "redoc/",
-        TemplateView.as_view(template_name="redoc.html"),
-        name="redoc",
+        'redoc/',
+        TemplateView.as_view(template_name='redoc.html'),
+        name='redoc',
     ),
-    path("", include("reviews.urls")),
-    path(f"api/{DEFAULT_VERSION}/", include("api.urls")),
+    path('', include('reviews.urls')),
+    path(f'api/{DEFAULT_VERSION}/', include('api.urls')),
 ]

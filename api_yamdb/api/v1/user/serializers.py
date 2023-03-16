@@ -9,18 +9,32 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "bio",
-            "role",
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'bio',
+            'role',
         )
 
     def validate_username(self, value):
         if value == SERVICE_NAME:
             raise ValidationError(
-                f"Использовать {SERVICE_NAME} в качестве username запрещено."
+                f'Использовать {SERVICE_NAME} в качестве username запрещено.',
+            )
+
+        return value
+
+
+class UserPatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'bio')
+
+    def validate_username(self, value):
+        if value == SERVICE_NAME:
+            raise ValidationError(
+                f'Использовать {SERVICE_NAME} в качестве username запрещено.',
             )
 
         return value

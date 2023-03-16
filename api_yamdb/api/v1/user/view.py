@@ -10,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 from user.models import User
 
 from .permissions import AdminPermission
-from .serializers import UserSerializer
+from .serializers import UserPatchSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -18,9 +18,9 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = (AdminPermission,)
     filter_backends = (SearchFilter,)
-    search_fields = ("username",)
-    http_method_names = ["get", "post", "patch", "delete"]
-    lookup_field = "username"
+    search_fields = ('username',)
+    http_method_names = ['get', 'post', 'patch', 'delete']
+    lookup_field = 'username'
 
 
 class UserMeAPIView(APIView):
@@ -30,9 +30,13 @@ class UserMeAPIView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=UserSerializer)
+    @swagger_auto_schema(request_body=UserPatchSerializer)
     def patch(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserPatchSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+        )
 
         serializer.is_valid(raise_exception=True)
         serializer.save()

@@ -42,12 +42,11 @@ class TokenAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         user = get_object_or_404(User, username=request.data["username"])
         if not default_token_generator.check_token(
-            user, serializer.data["confirmation_code"]
+            user,
+            serializer.data["confirmation_code"],
         ):
             raise ValidationError("Неверный код")
 
         token = get_tokens_for_user(user)
 
-        return Response(
-            dict(token=token),
-        )
+        return Response(token)
