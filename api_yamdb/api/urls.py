@@ -11,11 +11,11 @@ router = routers.DefaultRouter()
 router.register('titles', TitleViewSet, basename='titles')
 router.register('categories', CategoryViewSet, basename='categories')
 router.register('genres', GenreViewSet, basename='genres')
-router.register(r"users", UserViewSet, basename="user")
+router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
-    path("", include(router.urls)),
-    path("users/me/", UserMeAPIView.as_view(), name="user_me"),
-    path("auth/signup/", SignUpAPIView.as_view(), name="signup"),
-    path("auth/token/", TokenAPIView.as_view(), name="token"),
+    path('users/me/', UserMeAPIView.as_view(), name='user_me'),
+    path('auth/signup/', SignUpAPIView.as_view(), name='signup'),
+    path('auth/token/', TokenAPIView.as_view(), name='token'),
+    path('', include(router.urls)),
 ]
