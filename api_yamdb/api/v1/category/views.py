@@ -3,16 +3,22 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from reviews.models import Category
 from ..category.serializers import CategorySerializer
-from ..user.permissions import AdminPermission
+from ..user.permissions import AdminUserOrReadOnly
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
                    mixins.DestroyModelMixin,
                    viewsets.GenericViewSet):
+    """Класс представления обьектов модели Category через
+    одноимённый сериалайзер, используя Миксины на для запросов
+    на удаление, создание и получение обьектов. Реализованы так же
+    разрешение на доступ, поиск и пагинация обьектов"""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = LimitOffsetPagination
-    permission_classes = (AdminPermission, )
+    permission_classes = (AdminUserOrReadOnly, )
     filter_backends = (filters.SearchFilter, )
-    search_fields = ('category__slug',)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+

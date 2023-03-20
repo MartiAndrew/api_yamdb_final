@@ -2,6 +2,18 @@ from rest_framework import permissions
 from user.enums import UserRole
 
 
+class AdminUserOrReadOnly(permissions.BasePermission):
+    message = f"Доступно только для всех пользователей с безопасными запросами" \
+              f"или утентифицированных пользователей с ролью {UserRole.ADMIN}" \
+              f"для остальных запросов."
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
+            return request.user.role == UserRole.ADMIN
+        return False
+
+
 class AdminPermission(permissions.BasePermission):
     message = f"Доступно только для пользователей с ролью {UserRole.ADMIN}"
 

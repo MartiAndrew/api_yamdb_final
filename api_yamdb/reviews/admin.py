@@ -1,3 +1,30 @@
 from django.contrib import admin
 
-# Register your models here.
+from reviews.models import Title, Category, Genre, Review, Comment
+
+
+class TitleAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'year', 'description', 'category')
+    list_editable = ('category',)
+    search_fields = ('description', 'genre')
+    list_filter = ('year', 'category', 'genre')
+    filter_horizontal = ('genre',)
+    list_display_links = ('name',)
+    empty_value_display = '-пусто-'
+
+
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'slug')
+    list_display_links = list_display
+    prepopulated_fields = {'slug': ('name',)}
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'slug')
+    list_display_links = list_display
+    prepopulated_fields = {'slug': ('name',)}
+
+
+admin.site.register(Title, TitleAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Category, CategoryAdmin)

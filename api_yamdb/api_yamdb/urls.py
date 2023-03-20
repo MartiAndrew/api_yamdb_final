@@ -33,4 +33,5 @@ urlpatterns = [
     ),
     path('', include('reviews.urls')),
     path(f'api/{DEFAULT_VERSION}/', include('api.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 ]

@@ -32,4 +32,4 @@ class User(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         verbose_name = "Пользователь"
-        verbose_name = "Пользователи"
+        verbose_name_plural = "Пользователи"
