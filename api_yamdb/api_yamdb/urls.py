@@ -26,12 +26,9 @@ urlpatterns = [
         name='schema-swagger-ui',
     ),
     path('admin/', admin.site.urls),
-    path(
-        'redoc/',
-        TemplateView.as_view(template_name='redoc.html'),
-        name='redoc',
-    ),
-    path('', include('reviews.urls')),
+    path('redoc/',
+         TemplateView.as_view(template_name='redoc.html'),
+         name='redoc'),
     path(f'api/{DEFAULT_VERSION}/', include('api.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ]

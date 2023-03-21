@@ -6,10 +6,8 @@ from ..category.serializers import CategorySerializer
 from ..user.permissions import AdminUserOrReadOnly
 
 
-class CategoryViewSet(mixins.CreateModelMixin,
-                   mixins.ListModelMixin,
-                   mixins.DestroyModelMixin,
-                   viewsets.GenericViewSet):
+class CategoryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
+                      mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """Класс представления обьектов модели Category через
     одноимённый сериалайзер, используя Миксины на для запросов
     на удаление, создание и получение обьектов. Реализованы так же
@@ -21,4 +19,3 @@ class CategoryViewSet(mixins.CreateModelMixin,
     filter_backends = (filters.SearchFilter, )
     search_fields = ('name',)
     lookup_field = 'slug'
-

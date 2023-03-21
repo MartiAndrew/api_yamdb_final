@@ -5,8 +5,10 @@ from user.models import User
 
 LEIGHT_TEXT = 25
 
+
 class DataBaseExceptionError(Exception):
     """Ошибка базы данных"""
+
 
 class Command(BaseCommand):
     help = 'Импортирует данные из CSV-файлов в базу данных'
@@ -118,14 +120,17 @@ class Command(BaseCommand):
                             author=user_user
                         )
                         self.stdout.write(self.style.SUCCESS(
-                            f'Review "{reviews_review.text[:LEIGHT_TEXT]}" создан.'
+                            f'Review "{reviews_review.text[:LEIGHT_TEXT]}" '
+                            f'создан.'
                         ))
                     except Review.DoesNotExist:
                         self.stderr.write(self.style.ERROR(
-                            f'Review "{reviews_review.text[:LEIGHT_TEXT]}" не создан'
+                            f'Review "{reviews_review.text[:LEIGHT_TEXT]}" '
+                            f'не создан'
                         ))
                     except ValueError as error:
-                        self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
+                        self.stderr.write(self.style.ERROR(f'Error: '
+                                                           f'{str(error)}'))
             except DataBaseExceptionError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
@@ -149,14 +154,17 @@ class Command(BaseCommand):
                             author=user_user
                         )
                         self.stdout.write(self.style.SUCCESS(
-                            f'Comment "{reviews_comment.text[:LEIGHT_TEXT]}" создан.'
+                            f'Comment "{reviews_comment.text[:LEIGHT_TEXT]}" '
+                            f'создан.'
                         ))
                     except Comment.DoesNotExist:
                         self.stderr.write(self.style.ERROR(
-                            f'Comment "{reviews_comment.text[:LEIGHT_TEXT]}" не создан'
+                            f'Comment "{reviews_comment.text[:LEIGHT_TEXT]}" '
+                            f'не создан'
                         ))
                     except ValueError as error:
-                        self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
+                        self.stderr.write(self.style.ERROR(f'Error: '
+                                                           f'{str(error)}'))
             except DataBaseExceptionError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
@@ -171,12 +179,16 @@ class Command(BaseCommand):
                     genre = Genre.objects.get(id=genre_id)
                     title.genre.add(genre)
                     self.stdout.write(self.style.SUCCESS(
-                        f'Успешно добавлен genre "{genre}" в произведение "{title}"'))
+                        f'Успешно добавлен genre "{genre}" в произведение '
+                        f'"{title}"'))
                 except Title.DoesNotExist:
-                    self.stderr.write(self.style.ERROR(f'Произведение "{title_id}" не создано'))
+                    self.stderr.write(self.style.ERROR(
+                        f'Произведение "{title_id}" не создано'))
                 except Genre.DoesNotExist:
-                    self.stderr.write(self.style.ERROR(f'Жанр "{genre_id}" не создан'))
+                    self.stderr.write(self.style.ERROR(
+                        f'Жанр "{genre_id}" не создан'))
                 except DataBaseExceptionError as error:
                     self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        self.stdout.write(self.style.SUCCESS('База данных импортирована полностью.'))
+        self.stdout.write(self.style.SUCCESS('База данных импортирована '
+                                             'полностью.'))
