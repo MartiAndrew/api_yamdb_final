@@ -1,5 +1,4 @@
 from rest_framework import viewsets, filters, mixins
-from rest_framework.pagination import LimitOffsetPagination
 
 from reviews.models import Category
 from ..category.serializers import CategorySerializer
@@ -14,7 +13,6 @@ class CategoryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
     разрешение на доступ, поиск и пагинация обьектов"""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    pagination_class = LimitOffsetPagination
     permission_classes = (AdminUserOrReadOnly, )
     filter_backends = (filters.SearchFilter, )
     search_fields = ('name',)

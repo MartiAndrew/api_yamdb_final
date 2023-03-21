@@ -25,7 +25,7 @@ class User(AbstractUser):
     )
 
     def clean(self):
-        if self.username == SERVICE_NAME:
+        if self.username.lower() == SERVICE_NAME:
             raise ValidationError(
                 f"Использовать {SERVICE_NAME} в качестве username запрещено."
             )

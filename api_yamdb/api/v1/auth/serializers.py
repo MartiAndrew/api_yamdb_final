@@ -28,7 +28,7 @@ class SignUpSerializer(serializers.ModelSerializer):
         return user
 
     def validate_username(self, value):
-        if value == SERVICE_NAME:
+        if value.lower() == SERVICE_NAME:
             raise ValidationError(
                 f'Использовать {SERVICE_NAME} в качестве username запрещено.',
             )

@@ -6,7 +6,7 @@ from django.conf import settings
 from user.models import User
 from reviews.models import Genre, Category, Review, Comment, Title
 
-LEIGHT_TEXT = 25
+LENGTH_TEXT = 25
 
 
 class DataBaseExceptionError(Exception):
@@ -124,7 +124,7 @@ class Command(BaseCommand):
                             author=user_user
                         )
                         self.stdout.write(self.style.SUCCESS(
-                            f'Review "{reviews_review.text[:LEIGHT_TEXT]}" '
+                            f'Review "{reviews_review.text[:LENGTH_TEXT]}" '
                             f'создан.'
                         ))
                     except Review.DoesNotExist:
@@ -157,7 +157,7 @@ class Command(BaseCommand):
                             author=user_user
                         )
                         self.stdout.write(self.style.SUCCESS(
-                            f'Comment "{reviews_comment.text[:LEIGHT_TEXT]}" '
+                            f'Comment "{reviews_comment.text[:LENGTH_TEXT]}" '
                             f'создан.'
                         ))
                     except Comment.DoesNotExist:

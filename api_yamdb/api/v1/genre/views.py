@@ -1,5 +1,4 @@
 from rest_framework import viewsets, filters, mixins
-from rest_framework.pagination import LimitOffsetPagination
 
 from reviews.models import Genre
 from ..genre.serializers import GenreSerializer
@@ -16,7 +15,6 @@ class GenreViewSet(mixins.CreateModelMixin,
         разрешение на доступ, поиск и пагинация обьектов"""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    pagination_class = LimitOffsetPagination
     permission_classes = (AdminUserOrReadOnly, )
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)

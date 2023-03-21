@@ -132,12 +132,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
 }
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 }
 
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'api_key': {'type': 'apiKey', 'in': 'header', 'name': 'Authorization'}
-    },
-}
+if DEBUG:
+    SWAGGER_SETTINGS = {
+        'SECURITY_DEFINITIONS': {
+            'api_key': {'type': 'apiKey', 'in': 'header', 'name': 'Authorization'}
+        },
+    }

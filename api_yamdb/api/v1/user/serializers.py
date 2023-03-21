@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate_username(self, value):
-        if value == SERVICE_NAME:
+        if value.lower() == SERVICE_NAME:
             raise ValidationError(
                 f'Использовать {SERVICE_NAME} в качестве username запрещено.',
             )
@@ -32,7 +32,7 @@ class UserPatchSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'first_name', 'last_name', 'bio')
 
     def validate_username(self, value):
-        if value == SERVICE_NAME:
+        if value.lower() == SERVICE_NAME:
             raise ValidationError(
                 f'Использовать {SERVICE_NAME} в качестве username запрещено.',
             )
