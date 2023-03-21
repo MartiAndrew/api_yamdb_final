@@ -5,6 +5,7 @@ from reviews.models import Category, Title, Genre, Review
 from ..category.serializers import CategorySerializer
 from ..genre.serializers import GenreSerializer
 
+
 class TitleSerializer(ModelSerializer):
     """Класс сериалайзера для всех запросов к обьектам модели Title"""
     category = SlugRelatedField(queryset=Category.objects.all(),
@@ -24,9 +25,7 @@ class TitleReadSerializer(ModelSerializer):
     """Класс сериалайзер для безопасных запросов
     к обьектам модели Title"""
     category = CategorySerializer(read_only=True)
-    genre = GenreSerializer(many=True,
-                             read_only=True,
-                            )
+    genre = GenreSerializer(many=True, read_only=True,)
     rating = serializers.SerializerMethodField()
 
     class Meta:

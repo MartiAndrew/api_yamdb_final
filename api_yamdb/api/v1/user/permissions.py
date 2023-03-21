@@ -3,9 +3,10 @@ from user.enums import UserRole
 
 
 class AdminUserOrReadOnly(permissions.BasePermission):
-    message = f"Доступно только для всех пользователей с безопасными запросами" \
-              f"или утентифицированных пользователей с ролью {UserRole.ADMIN}" \
-              f"для остальных запросов."
+    message = (f"Доступно только для всех пользователей с безопасными "
+               f"запросами или утентифицированных пользователей с ролью "
+               f"{UserRole.ADMIN} для остальных запросов.")
+
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -28,4 +29,17 @@ class ModeratorRole(permissions.BasePermission):
     message = f"Доступно только для пользователей с ролью {UserRole.MODERATOR}"
 
     def has_permission(self, request, view):
-        return (request.user.role == UserRole.MODERATOR or request.user.is_superuser,)
+        return (request.user.role == UserRole.MODERATOR
+                or request.user.is_superuser)
+
+
+class IsAuthorModeratorOrReadOnly(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return (request.method in permissions.SAFE_METHODS
+                or request.user.is_authenticated)
+
+    def has_object_permission(self, request, view, obj):
+        return (request.method in permissions.SAFE_METHODS
+                or obj.author == request.user
+                or request.user.role in (UserRole.MODERATOR, UserRole.ADMIN))
