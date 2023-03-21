@@ -1,7 +1,10 @@
 import csv
 from django.core.management.base import BaseCommand
-from ...models import Genre, Category, Review, Comment, Title
+
+from django.conf import settings
+
 from user.models import User
+from reviews.models import Genre, Category, Review, Comment, Title
 
 LEIGHT_TEXT = 25
 
@@ -13,8 +16,9 @@ class DataBaseExceptionError(Exception):
 class Command(BaseCommand):
     help = 'Импортирует данные из CSV-файлов в базу данных'
 
-    def handle(self, *args, **options):
-        with open('static/data/category.csv', encoding='utf-8') as csvfile:
+    def load_category(self):
+        path = f'{settings.BASE_DIR}/static/data/category.csv'
+        with open(path, encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             try:
@@ -27,13 +31,13 @@ class Command(BaseCommand):
                         f'Category {reviews_category.name} создан.'
                     ))
             except Category.DoesNotExist:
-                self.stderr.write(self.style.ERROR(
-                    f'Category "{reviews_category.name}" не создан'
-                ))
+                self.stderr.write(self.style.ERROR('Category не создан'))
             except ValueError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        with open('static/data/genre.csv', encoding='utf-8') as csvfile:
+    def load_genre(self):
+        path = f'{settings.BASE_DIR}/static/data/genre.csv'
+        with open(path, encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             try:
@@ -46,13 +50,13 @@ class Command(BaseCommand):
                         f'Genre {reviews_genre.name} создан.'
                     ))
             except Genre.DoesNotExist:
-                self.stderr.write(self.style.ERROR(
-                    f'Genre "{reviews_category.name}" не создан'
-                ))
+                self.stderr.write(self.style.ERROR('Genre не создан'))
             except ValueError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        with open('static/data/titles.csv', encoding='utf-8') as csvfile:
+    def load_titles(self):
+        path = f'{settings.BASE_DIR}/static/data/titles.csv'
+        with open(path, encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             try:
@@ -67,13 +71,13 @@ class Command(BaseCommand):
                     )
                     )
             except Title.DoesNotExist:
-                self.stderr.write(self.style.ERROR(
-                    f'Title "{reviews_title.name}" не создан'
-                ))
+                self.stderr.write(self.style.ERROR('Title  не создан'))
             except ValueError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        with open('static/data/users.csv', encoding='utf-8') as csvfile:
+    def load_users(self):
+        path = f'{settings.BASE_DIR}/static/data/users.csv'
+        with open(path, encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             try:
@@ -92,14 +96,14 @@ class Command(BaseCommand):
                     )
                     )
             except User.DoesNotExist:
-                self.stderr.write(self.style.ERROR(
-                    f'User "{user_user.username}" не создан'
-                ))
+                self.stderr.write(self.style.ERROR('User не создан'))
 
             except ValueError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        with open('static/data/review.csv', encoding='utf-8') as csvfile:
+    def load_reviews(self):
+        path = f'{settings.BASE_DIR}/static/data/review.csv'
+        with open(path, encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             try:
@@ -124,17 +128,16 @@ class Command(BaseCommand):
                             f'создан.'
                         ))
                     except Review.DoesNotExist:
-                        self.stderr.write(self.style.ERROR(
-                            f'Review "{reviews_review.text[:LEIGHT_TEXT]}" '
-                            f'не создан'
-                        ))
+                        self.stderr.write(self.style.ERROR('Review не создан'))
                     except ValueError as error:
                         self.stderr.write(self.style.ERROR(f'Error: '
                                                            f'{str(error)}'))
             except DataBaseExceptionError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        with open('static/data/comments.csv', encoding='utf-8') as csvfile:
+    def load_comments(self):
+        path = f'{settings.BASE_DIR}/static/data/comments.csv'
+        with open(path, encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             try:
@@ -158,17 +161,17 @@ class Command(BaseCommand):
                             f'создан.'
                         ))
                     except Comment.DoesNotExist:
-                        self.stderr.write(self.style.ERROR(
-                            f'Comment "{reviews_comment.text[:LEIGHT_TEXT]}" '
-                            f'не создан'
-                        ))
+                        self.stderr.write(
+                            self.style.ERROR('Comment не создан'))
                     except ValueError as error:
                         self.stderr.write(self.style.ERROR(f'Error: '
                                                            f'{str(error)}'))
             except DataBaseExceptionError as error:
                 self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
 
-        with open('static/data/genre_title.csv', newline='') as csvfile:
+    def load_genre_titles(self):
+        path = f'{settings.BASE_DIR}/static/data/genre_title.csv'
+        with open(path, newline='') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
             for row in reader:
@@ -179,16 +182,20 @@ class Command(BaseCommand):
                     genre = Genre.objects.get(id=genre_id)
                     title.genre.add(genre)
                     self.stdout.write(self.style.SUCCESS(
-                        f'Успешно добавлен genre "{genre}" в произведение '
+                        f'Успешно добавлен genre "{genre}" в произведение'
                         f'"{title}"'))
-                except Title.DoesNotExist:
+                except (Title.DoesNotExist, Genre.DoesNotExist,):
                     self.stderr.write(self.style.ERROR(
-                        f'Произведение "{title_id}" не создано'))
-                except Genre.DoesNotExist:
-                    self.stderr.write(self.style.ERROR(
-                        f'Жанр "{genre_id}" не создан'))
+                        'Произведение/Жанр не создан'))
                 except DataBaseExceptionError as error:
                     self.stderr.write(self.style.ERROR(f'Error: {str(error)}'))
+
+    def handle(self, *args, **options):
+        self.load_category()
+        self.load_genre()
+        self.load_titles()
+        self.load_users()
+        self.load_genre_titles()
 
         self.stdout.write(self.style.SUCCESS('База данных импортирована '
                                              'полностью.'))
