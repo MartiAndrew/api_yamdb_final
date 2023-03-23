@@ -1,11 +1,11 @@
 from rest_framework import serializers
-
 from reviews.models import Review
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(read_only=True,
-                                          slug_field='username')
+                                          slug_field='username'
+                                          )
     title = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -18,5 +18,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         if (Review.objects.filter(title=title, author=user).exists()
                 and self.context.get('request').method == 'POST'):
             raise serializers.ValidationError(
-                'Вы уже оставили отзыв на это произведение!')
+                'Вы уже оставили отзыв на это произведение!'
+            )
         return data

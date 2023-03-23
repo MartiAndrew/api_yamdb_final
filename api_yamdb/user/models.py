@@ -1,10 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+from django.db import models
 
-
-from .enums import UserRole
 from .consts import SERVICE_NAME
+from .enums import UserRole
 
 
 class User(AbstractUser):

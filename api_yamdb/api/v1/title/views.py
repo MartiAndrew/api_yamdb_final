@@ -1,8 +1,8 @@
-from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import viewsets
 from reviews.models import Title
-from ..title.serializers import TitleSerializer, TitleReadSerializer
+
+from ..title.serializers import TitleReadSerializer, TitleSerializer
 from ..user.permissions import AdminUserOrReadOnly
 from .filters import TitleFilter
 
