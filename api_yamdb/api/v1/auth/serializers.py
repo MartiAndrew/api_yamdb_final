@@ -1,6 +1,7 @@
 from django.db.utils import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
 from user.consts import SERVICE_NAME
 from user.models import User
 

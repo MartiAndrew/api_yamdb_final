@@ -1,4 +1,5 @@
 from rest_framework import filters, mixins, viewsets
+
 from reviews.models import Genre
 
 from ..genre.serializers import GenreSerializer

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SlugRelatedField
+
 from reviews.models import Category, Genre, Review, Title
 
 from ..category.serializers import CategorySerializer
